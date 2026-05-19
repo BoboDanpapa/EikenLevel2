@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 英検2級 魔法の単語帳 🌟</title>
+    <style>
+        body { font-family: 'Comic Sans MS', 'Nunito', 'Segoe UI', sans-serif; background-color: #f7f1fa; margin: 0; padding: 0; color: #4a235a; }
+        header { background: linear-gradient(135deg, #ba68c8, #9c27b0); color: white; text-align: center; padding: 20px; font-size: 24px; font-weight: bold; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3); margin-bottom: 10px; }
+        .nav { display: flex; justify-content: center; gap: 10px; padding: 10px; flex-wrap: wrap;}
+        .jelly-btn { background-color: #ce93d8; color: white; border: none; font-size: 15px; font-weight: bold; cursor: pointer; padding: 12px 18px; border-radius: 25px; box-shadow: 0 6px 0 #ab47bc; transition: all 0.1s; font-family: inherit; }
+        .jelly-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #ab47bc; }
+        .nav .jelly-btn { background-color: #b39ddb; box-shadow: 0 6px 0 #7e57c2; }
+        .nav .jelly-btn:active { box-shadow: 0 0 0 #7e57c2; }
+        .container { max-width: 500px; margin: 10px auto 30px auto; background: white; padding: 30px; border-radius: 30px; border: 4px solid #e1bee7; box-shadow: 0 10px 25px rgba(206, 147, 216, 0.3); text-align: center; }
+        .hidden { display: none !important; }
+        
+        /* 魔法卡片样式 */
+        .card { background: linear-gradient(135deg, #f3e5f5, #e1bee7); color: #6a1b9a; padding: 40px 20px; border-radius: 25px; margin: 20px 0; cursor: pointer; font-size: 32px; font-weight: bold; border: 3px dashed #ce93d8; box-shadow: 0 8px 15px rgba(206, 147, 216, 0.4); transition: transform 0.3s; }
+        .card:hover { transform: scale(1.03) rotate(1deg); }
+        .details { font-size: 18px; margin-top: 20px; font-weight: normal; background: rgba(255,255,255,0.6); padding: 15px; border-radius: 15px; }
+        .sentence { font-style: italic; margin-top: 10px; color: #4a235a; font-weight: bold;}
+        
+        .btn-speak { background-color: #ffd54f; color: #d84315; box-shadow: 0 5px 0 #ffb300; }
+        .btn-speak:active { box-shadow: 0 0 0 #ffb300; }
+        .btn-star { background-color: #fff59d; color: #f57f17; box-shadow: 0 5px 0 #fbc02d; margin-top: 10px; font-size: 14px;}
+        .btn-star:active { box-shadow: 0 0 0 #fbc02d; }
+        .btn-starred { background-color: #ffcc80; color: #e65100; box-shadow: 0 5px 0 #ef6c00; }
+        .btn-starred:active { box-shadow: 0 0 0 #ef6c00; }
+
+        .options { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+        .option-btn { background-color: white; border: 3px solid #e1bee7; color: #6a1b9a; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 20px; cursor: pointer; transition: 0.2s; font-family: inherit; }
+        .option-btn:hover { background-color: #f3e5f5; transform: scale(1.02); }
+        .status-bar { font-size: 18px; color: #9c27b0; background-color: #f3e5f5; padding: 10px; border-radius: 20px; font-weight: bold; margin-bottom: 20px; display: inline-block; }
+        
+        /* 🔥 升级折叠版复习列表 */
+        .review-list { text-align: left; margin-top: 20px; max-height: 450px; overflow-y: auto; padding-right: 5px; }
+        .review-item { background: #fafafa; border: 2px dashed #ce93d8; border-radius: 20px; margin-bottom: 15px; transition: 0.3s; text-align: left; overflow: hidden;}
+        
+        /* 头部（可点击区域） */
+        .review-header { padding: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; background: #fafafa; transition: background 0.2s;}
+        .review-header:hover { background: #f3e5f5; }
+        
+        .review-item-en { font-size: 22px; font-weight: bold; color: #6a1b9a; margin-right: 8px; }
+        .review-item-jp { font-size: 15px; color: #d81b60; font-weight: bold; margin-top: 2px; }
+        
+        /* 折叠的底部内容区域 */
+        .review-body { padding: 0 18px 18px 18px; border-top: 2px dashed #e1bee7; background: #fafafa; }
+        .review-item-sent-en { font-style: italic; color: #4a235a; font-weight: bold; font-size: 14px; flex-grow: 1; display: inline-block; margin-top:10px;}
+        .review-item-sent-jp { font-size: 13px; color: #666; margin-top: 4px; }
+        
+        .small-btn-speak { background-color: #ffd54f; color: #d84315; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; box-shadow: 0 4px 0 #ffb300; display: inline-flex; justify-content: center; align-items: center; font-size: 14px; margin-left: 5px; transition: 0.1s; }
+        .small-btn-speak:active { transform: translateY(4px); box-shadow: 0 0 0 #ffb300; }
+        .btn-remove { background-color: #ffcdd2; color: #c62828; border: none; padding: 8px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; font-family: inherit; box-shadow: 0 4px 0 #ef9a9a; transition: 0.1s; font-size: 13px; height: fit-content; z-index: 10;}
+        .btn-remove:active { transform: translateY(4px); box-shadow: 0 0 0 #ef9a9a; }
+
+        .gallery { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px;}
+        .character-card { width: 110px; height: 150px; background-color: #f5f5f5; border: 3px dashed #ccc; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #999; text-align: center; padding: 5px; }
+        .unlocked { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); border: 3px solid #ff758c; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); box-shadow: 0 4px 10px rgba(255, 117, 140, 0.4); animation: pop 0.5s ease-out; }
+        @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 30px; box-shadow: 0 10px 40px rgba(156, 39, 176, 0.5); z-index: 1000; display: none; text-align: center; border: 5px solid #ce93d8; width: 80%; max-width: 350px;}
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; display: none; backdrop-filter: blur(3px); }
+    </style>
+</head>
+<body>
+
+<header>✨ 英検2級 魔法の単語帳 ✨</header>
+<div class="nav">
+    <button class="jelly-btn" onclick="switchTab('study')">📖 魔法のカード</button>
+    <button class="jelly-btn" onclick="switchTab('review')">📓 復習ノート</button>
+    <button class="jelly-btn" onclick="switchTab('quiz')">🎯 鬼殺隊の試練</button>
+    <button class="jelly-btn" onclick="switchTab('collection')">🎴 絆の図鑑</button>
+</div>
+
+<div id="study" class="container">
+    <h2 style="color: #8e24aa;">🪄 新しい呪文（単語）</h2>
+    <p style="color: #999; font-size: 14px;">カードをタップして、翻訳魔法を使おう！</p>
+    <div style="display: flex; justify-content: center; gap: 10px;">
+        <button class="jelly-btn btn-speak" onclick="speakWord()">📢 発音を聞く</button>
+        <button id="btn-star" class="jelly-btn btn-star" onclick="toggleReview()">⭐ 復習に追加</button>
+    </div>
+    <div class="card" onclick="toggleCard()">
+        <span id="study-word">Loading...</span>
+        <div id="study-details" class="details hidden">
+            <div id="study-jp" style="font-size: 22px; color: #d81b60;">...</div>
+            <hr style="border-top:2px dashed #ce93d8; margin: 15px 0;">
+            <div class="sentence" id="study-en-sent">...</div>
+            <button class="jelly-btn btn-speak" style="padding: 6px 12px; font-size: 14px; margin-top:10px;" onclick="speakSentence(event)">📢 例文を聞く</button>
+            <div id="study-jp-sent" style="font-size: 15px; margin-top: 10px; color: #555;">...</div>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <button class="jelly-btn" style="background-color: #f48fb1; box-shadow: 0 6px 0 #d81b60;" onclick="nextStudyWord(-1)">⬅️ 前へ</button>
+        <button class="jelly-btn" style="background-color: #64b5f6; box-shadow: 0 6px 0 #1e88e5;" onclick="nextStudyWord(1)">次へ ➡️</button>
+    </div>
+</div>
+
+<div id="review" class="container hidden">
+    <h2 style="color: #8e24aa;">📓 復習ノート</h2>
+    <p style="color: #777; font-size: 14px;">タップすると例文が開くよ！</p>
+    <div id="review-list" class="review-list"></div>
+</div>
+
+<div id="quiz" class="container hidden">
+    <h2 style="color: #8e24aa;">⚔️ 鬼殺隊入隊試験</h2>
+    <div class="status-bar">🔥 連続正解: <span id="streak" style="font-size: 24px;">0</span> / 3 <br><span style="font-size:12px; color:#666;">(3問連続正解で新しい仲間が登場！)</span></div>
+    <h1 id="quiz-word" style="font-size: 42px; color: #4a235a; margin: 10px 0;">Loading...</h1>
+    <button class="jelly-btn btn-speak" onclick="speakQuizWord()">📢 発音のヒント</button>
+    <div class="options" id="quiz-options"></div>
+</div>
+
+<div id="collection" class="container hidden">
+    <h2 style="color: #8e24aa;">🎴 絆の図鑑</h2>
+    <p style="color: #777;">試験をクリアして、すべての柱を解放しよう！</p>
+    <div class="gallery" id="gallery"></div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="modal" id="modal">
+    <h2 style="color: #d81b60;">🎉 すごい！やったね！</h2>
+    <p style="color: #666;">新しい仲間を呼び出したよ：</p>
+    <h1 id="unlocked-character" style="color: #8e24aa; font-size: 32px; margin: 20px 0; white-space: pre-wrap;">...</h1>
+    <button class="jelly-btn" style="background-color: #ffb74d; box-shadow: 0 6px 0 #f57c00; font-size: 18px; padding: 10px 30px;" onclick="closeModal()">試験を続ける ⚔️</button>
+</div>
+
+<script src="words.js"></script>
+
+<script>
+    const characters = [
+        { name: "竈門 炭治郎\n(水の呼吸)", unlocked: false },
+        { name: "竈門 禰豆子\n(爆血)", unlocked: false },
+        { name: "我妻 善逸\n(霹靂一閃)", unlocked: false },
+        { name: "嘴平 伊之助\n(獣の呼吸)", unlocked: false },
+        { name: "冨岡 義勇\n(水柱)", unlocked: false },
+        { name: "胡蝶 しのぶ\n(蟲柱)", unlocked: false }
+    ];
+
+    let currentStudyIndex = 0;
+    let currentQuizWord = null;
+    let streak = 0;
+    const WIN_STREAK_TARGET = 3; 
+    let reviewWordsList = [];
+
+    function switchTab(tabId) {
+        document.getElementById('study').classList.add('hidden');
+        document.getElementById('review').classList.add('hidden');
+        document.getElementById('quiz').classList.add('hidden');
+        document.getElementById('collection').classList.add('hidden');
+        
+        document.getElementById(tabId).classList.remove('hidden');
+
+        if(tabId === 'study') loadStudyWord();
+        if(tabId === 'review') renderReviewList(); 
+        if(tabId === 'quiz') loadQuizWord();
+        if(tabId === 'collection') renderGallery();
+    }
+
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US'; 
+            utterance.rate = 0.85; 
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function loadStudyWord() {
+        if (typeof vocabData === 'undefined' || vocabData.length === 0) {
+            alert("エラー：words.js ファイルが見つからないか、データがありません！");
+            return;
+        }
+        const word = vocabData[currentStudyIndex];
+        document.getElementById('study-word').innerText = word.en;
+        document.getElementById('study-jp').innerText = word.jp;
+        document.getElementById('study-en-sent').innerText = word.enSent;
+        document.getElementById('study-jp-sent').innerText = word.jpSent;
+        document.getElementById('study-details').classList.add('hidden');
+        updateStarButton();
+    }
+
+    function toggleCard() { document.getElementById('study-details').classList.toggle('hidden'); }
+    
+    function nextStudyWord(direction) { 
+        currentStudyIndex = currentStudyIndex + direction;
+        if (currentStudyIndex >= vocabData.length) currentStudyIndex = 0;
+        if (currentStudyIndex < 0) currentStudyIndex = vocabData.length - 1;
+        loadStudyWord(); 
+    }
+    
+    function speakWord() { speak(vocabData[currentStudyIndex].en); }
+    function speakSentence(event) { event.stopPropagation(); speak(vocabData[currentStudyIndex].enSent); }
+
+    function toggleReview() {
+        const currentEn = vocabData[currentStudyIndex].en;
+        const indexInReview = reviewWordsList.indexOf(currentEn);
+        if (indexInReview > -1) {
+            reviewWordsList.splice(indexInReview, 1);
+        } else {
+            reviewWordsList.push(currentEn);
+        }
+        updateStarButton();
+    }
+
+    function updateStarButton() {
+        const currentEn = vocabData[currentStudyIndex].en;
+        const btn = document.getElementById('btn-star');
+        if (reviewWordsList.includes(currentEn)) {
+            btn.innerText = "🌟 復習から外す";
+            btn.classList.add('btn-starred');
+        } else {
+            btn.innerText = "⭐ 復習に追加";
+            btn.classList.remove('btn-starred');
+        }
+    }
+
+    /* 🔥 带有折叠功能的复习列表 🔥 */
+    function renderReviewList() {
+        const listDiv = document.getElementById('review-list');
+        listDiv.innerHTML = '';
+        
+        if (reviewWordsList.length === 0) {
+            listDiv.innerHTML = '<p style="text-align:center; color:#999; margin-top: 40px; font-size: 18px;">ノートは空っぽだよ！<br><br>全部覚えたね！すばらしい！🎉</p>';
+            return;
+        }
+        
+        reviewWordsList.forEach(enWord => {
+            const wordObj = vocabData.find(w => w.en === enWord);
+            if (!wordObj) return;
+            const safeId = wordObj.en.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+            
+            const item = document.createElement('div');
+            item.className = 'review-item';
+            
+            // 头部（可点击展开），包含喇叭和删除按钮（注意阻止冒泡）
+            item.innerHTML = `
+                <div class="review-header" id="header-${safeId}">
+                    <div>
+                        <div style="display: flex; align-items: center;">
+                            <span class="review-item-en">${wordObj.en}</span>
+                            <button class="small-btn-speak" id="speak-word-${safeId}">📢</button>
+                        </div>
+                        <div class="review-item-jp">${wordObj.jp}</div>
+                    </div>
+                    <button class="btn-remove" id="remove-${safeId}">🗑️ 覚えた！</button>
+                </div>
+                
+                <div class="review-body hidden" id="body-${safeId}">
+                    <div style="display: flex; align-items: center;">
+                        <span class="review-item-sent-en">${wordObj.enSent}</span>
+                        <button class="small-btn-speak" style="margin-top:10px;" id="speak-sent-${safeId}">📢</button>
+                    </div>
+                    <div class="review-item-sent-jp">${wordObj.jpSent}</div>
+                </div>
+            `;
+            
+            listDiv.appendChild(item);
+            
+            // 绑定折叠/展开事件
+            document.getElementById(`header-${safeId}`).onclick = () => {
+                const bodyDiv = document.getElementById(`body-${safeId}`);
+                bodyDiv.classList.toggle('hidden');
+            };
+
+            // 绑定按钮事件，并使用 event.stopPropagation() 防止触发折叠
+            document.getElementById(`speak-word-${safeId}`).onclick = (e) => { 
+                e.stopPropagation(); 
+                speak(wordObj.en); 
+            };
+            document.getElementById(`speak-sent-${safeId}`).onclick = (e) => { 
+                e.stopPropagation(); 
+                speak(wordObj.enSent); 
+            };
+            document.getElementById(`remove-${safeId}`).onclick = (e) => { 
+                e.stopPropagation(); 
+                reviewWordsList = reviewWordsList.filter(w => w !== enWord);
+                renderReviewList(); 
+            };
+        });
+    }
+
+    function loadQuizWord() {
+        const randomIndex = Math.floor(Math.random() * vocabData.length);
+        currentQuizWord = vocabData[randomIndex];
+        document.getElementById('quiz-word').innerText = currentQuizWord.en;
+        let options = [currentQuizWord.jp];
+        while(options.length < 4) {
+            let randomWrongIndex = Math.floor(Math.random() * vocabData.length);
+            let wrongJp = vocabData[randomWrongIndex].jp;
+            if(!options.includes(wrongJp)) { options.push(wrongJp); }
+        }
+        options.sort(() => Math.random() - 0.5);
+        const optionsDiv = document.getElementById('quiz-options');
+        optionsDiv.innerHTML = '';
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt, btn);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function speakQuizWord() { speak(currentQuizWord.en); }
+
+    function checkAnswer(selectedJp, btn) {
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        if (selectedJp === currentQuizWord.jp) {
+            btn.style.backgroundColor = '#a5d6a7'; btn.style.borderColor = '#4caf50'; btn.style.color = '#1b5e20';
+            streak++; document.getElementById('streak').innerText = streak;
+            setTimeout(() => {
+                if (streak >= WIN_STREAK_TARGET) { unlockCharacter(); } else { loadQuizWord(); }
+            }, 800);
+        } else {
+            btn.style.backgroundColor = '#ef9a9a'; btn.style.borderColor = '#f44336'; btn.style.color = '#b71c1c';
+            streak = 0; document.getElementById('streak').innerText = streak;
+            speak(currentQuizWord.en); 
+            setTimeout(loadQuizWord, 1200);
+        }
+    }
+
+    function unlockCharacter() {
+        streak = 0; document.getElementById('streak').innerText = streak;
+        let lockedChars = characters.filter(c => !c.unlocked);
+        if (lockedChars.length > 0) {
+            let newChar = lockedChars[0]; newChar.unlocked = true;
+            document.getElementById('unlocked-character').innerText = newChar.name;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('modal').style.display = 'block';
+        } else {
+            alert("すばらしい！すべての柱と仲間を集めたよ！"); loadQuizWord();
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('modal').style.display = 'none';
+        loadQuizWord(); 
+    }
+
+    function renderGallery() {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = '';
+        characters.forEach(char => {
+            const div = document.createElement('div');
+            div.className = 'character-card ' + (char.unlocked ? 'unlocked' : '');
+            div.innerText = char.unlocked ? char.name : "🔒\n未知の仲間";
+            gallery.appendChild(div);
+        });
+    }
+
+    window.onload = function() { loadStudyWord(); };
+</script>
+</body>
+</html>
